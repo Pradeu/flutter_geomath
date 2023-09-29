@@ -40,28 +40,26 @@ class _nameState extends State<RoundPage> {
                 ),
                 const Text("Значения точки A:", textAlign: TextAlign.center),
                 Container(
-                    margin: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: _getTextField(context, _textcontroller1,
                         variable_name, "Введите координату X:")),
                 Container(
-                    margin: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: _getTextField(context, _textcontroller2,
                         variable_name, "Введите координату Y:")),
                 const Text('Значения точки B:'),
                 Container(
-                    margin: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
                     child: _getTextField(context, _textcontroller3,
                         variable_name, "Введите координату X")),
                 Container(
-                    margin: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-                    child: _getTextField(context, _textcontroller4,
-                        variable_name, "Введите координату Y:")),
-                Container(
-                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-                    child: TextButton(
-                      child: Text("Решить задачу"),
-                      onPressed: () {
+                    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: TextField(
+                      textInputAction: TextInputAction.done,
+                      controller: _textcontroller4,
+                      onSubmitted: (value) {
                         try {
+                          variable_name = double.parse(_textcontroller4.text);
                           setState(() {
                             double Xa = _getData(context, _textcontroller1);
                             double Ya = _getData(context, _textcontroller2);
@@ -73,28 +71,55 @@ class _nameState extends State<RoundPage> {
                           print("Возникла ошибка $e");
                         }
                       },
+                      decoration: const InputDecoration(
+                          labelText: "Введите координату Y:",
+                          border: OutlineInputBorder()),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
                     )),
-                SelectableText(
-                  res,
-                  style: TextStyle(fontSize: 25),
-                  onTap: () {
-                    _textcontroller1.clear();
-                    _textcontroller2.clear();
-                    _textcontroller3.clear();
-                    _textcontroller4.clear();
-                    Clipboard.setData(ClipboardData(text: res)).then(
-                      (_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text(
-                              "Текст скопирован!",
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        );
+                Container(
+                    margin: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                    child: TextButton(
+                      child: const Text("Решить задачу"),
+                      onPressed: () {
+                        try {
+                          setState(() {
+                            double Xa = _getData(context, _textcontroller1);
+                            double Ya = _getData(context, _textcontroller2);
+                            double Xb = _getData(context, _textcontroller3);
+                            double Yb = _getData(context, _textcontroller4);
+                            res = GeoMath.revGeoTask(Xa, Ya, Xb, Yb);
+                          });
+                        } catch (e) {
+                          print("Возникла ошибка $e");
+                        }
                       },
-                    );
-                  },
+                    )),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                  child: SelectableText(
+                    res,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 18),
+                    onTap: () {
+                      _textcontroller1.clear();
+                      _textcontroller2.clear();
+                      _textcontroller3.clear();
+                      _textcontroller4.clear();
+                      Clipboard.setData(ClipboardData(text: res)).then(
+                        (_) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                "Текст скопирован!",
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
                 )
               ],
             ),

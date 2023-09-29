@@ -38,21 +38,50 @@ class _nameState extends State<GMSPage> {
                   ),
                 ),
                 Container(
-                    margin: const EdgeInsets.all(20),
-                    child: _getTextField(context, _textcontroller1,
-                        variable_name, "Введите градусы:")),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: _getTextField(
+                        context,
+                        _textcontroller1,
+                        variable_name,
+                        TextInputAction.next,
+                        "Введите градусы:")),
                 Container(
-                    margin: const EdgeInsets.all(20),
-                    child: _getTextField(context, _textcontroller2,
-                        variable_name, "Введите минуты:")),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: _getTextField(
+                        context,
+                        _textcontroller2,
+                        variable_name,
+                        TextInputAction.next,
+                        "Введите минуты:")),
                 Container(
-                    margin: const EdgeInsets.all(20),
-                    child: _getTextField(context, _textcontroller3,
-                        variable_name, "Введите секунды:")),
+                    margin: const EdgeInsets.fromLTRB(20, 10, 20, 10),
+                    child: TextField(
+                      textInputAction: TextInputAction.done,
+                      controller: _textcontroller3,
+                      onSubmitted: (value) {
+                        try {
+                          variable_name = double.parse(_textcontroller3.text);
+                          setState(() {
+                            double degree = _getData(context, _textcontroller1);
+                            double min = _getData(context, _textcontroller2);
+                            double sec = _getData(context, _textcontroller3);
+                            res = GeoMath.toDeg(degree, min, sec)
+                                .toStringAsFixed(2);
+                          });
+                        } catch (e) {
+                          print("Возникла ошибка $e");
+                        }
+                      },
+                      decoration: const InputDecoration(
+                          labelText: "Введите секунды:",
+                          border: OutlineInputBorder()),
+                      keyboardType:
+                          const TextInputType.numberWithOptions(decimal: true),
+                    )),
                 Container(
                     margin: const EdgeInsets.all(20),
                     child: TextButton(
-                      child: Text("Рассчитать градусы"),
+                      child: const Text("Рассчитать градусы"),
                       onPressed: () {
                         try {
                           setState(() {
@@ -69,7 +98,8 @@ class _nameState extends State<GMSPage> {
                     )),
                 SelectableText(
                   res,
-                  style: TextStyle(fontSize: 25),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 25),
                   onTap: () {
                     _textcontroller1.clear();
                     _textcontroller2.clear();
@@ -97,10 +127,10 @@ class _nameState extends State<GMSPage> {
   }
 }
 
-Widget _getTextField(
-    BuildContext context, controller, variable_name, String label_text) {
+Widget _getTextField(BuildContext context, controller, variable_name, action,
+    String label_text) {
   return TextField(
-    textInputAction: TextInputAction.next,
+    textInputAction: action,
     controller: controller,
     onSubmitted: (value) {
       try {

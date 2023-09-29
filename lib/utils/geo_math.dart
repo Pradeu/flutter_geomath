@@ -36,7 +36,7 @@ class GeoMath {
     double deltaY = d * sin(rad);
     double Xb = x + deltaX;
     double Yb = y + deltaY;
-    return "Координаты точки B: по X = ${Xb.toStringAsFixed(2)}, по Y = ${Yb.toStringAsFixed(2)}";
+    return "Координаты точки B:\nпо X = ${Xb.toStringAsFixed(2)}\nпо Y = ${Yb.toStringAsFixed(2)}";
   }
 
   static String revGeoTask(
@@ -56,6 +56,6 @@ class GeoMath {
     }
     double d = deltaX / cos(angle);
     String degree = toGMS(_toDegree(angle));
-    return "Горизонтальное проложение А: ${d.toStringAsFixed(2)}, дирекционный угол А: ${degree}";
+    return "Горизонтальное проложение А: ${d.toStringAsFixed(2)}\nДирекционный угол А: ${degree}";
   }
 }
